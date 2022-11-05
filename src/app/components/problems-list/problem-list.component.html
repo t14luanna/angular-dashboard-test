@@ -1,0 +1,127 @@
+<ng-template #problemMainItem let-problem="problem">
+  <div class="problem-list" [ngClass]="{ expanded: problem?.isExpanded }">
+    <div
+      class="problem-list-item problem-list-header"
+      (click)="toggle(problem)"
+    >
+      <div class="title">
+        {{ problem?.title }}
+      </div>
+      <div class="first-crawl">
+        {{ problem?.firstCrawl.length }}
+      </div>
+      <div class="second-crawl">
+        {{ problem?.secondCrawl.length }}
+      </div>
+      <div
+        class="diff-crawl"
+        [ngClass]="{
+          'text--red':
+            problem?.firstCrawl.length - problem?.secondCrawl.length > 0,
+          'text--green':
+            problem?.firstCrawl.length - problem?.secondCrawl.length < 0
+        }"
+      >
+        {{
+          problem?.firstCrawl.length - problem?.secondCrawl.length === 0
+            ? "-"
+            : problem?.firstCrawl.length - problem?.secondCrawl.length
+        }}
+      </div>
+      <div
+        class="diff-crawl-percent"
+        [ngClass]="{
+          'text--red':
+            problem?.firstCrawl.length - problem?.secondCrawl.length > 0,
+          'text--green':
+            problem?.firstCrawl.length - problem?.secondCrawl.length < 0
+        }"
+      >
+        {{
+          problem?.firstCrawl.length - problem?.secondCrawl.length === 0
+            ? "-"
+            : (((problem?.firstCrawl.length - problem?.secondCrawl.length) /
+                problem?.secondCrawl.length) *
+                100 | number: "1.0-0") + "%"
+        }}
+      </div>
+      <div>{{ problem?.isExpanded ? "Collapse" : "Expand" }}</div>
+    </div>
+    <div class="problem-list-body">
+      <ng-container
+        *ngFor="let problem of problem?.subProblems"
+        [ngTemplateOutlet]="problemItem"
+        [ngTemplateOutletContext]="{ problem: problem }"
+      >
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #problemItem let-problem="problem" let-title="title">
+  <div class="problem-list-item">
+    <div class="title">
+      {{ problem?.title }}
+    </div>
+    <div class="first-crawl">
+      {{ problem?.firstCrawl.length }}
+    </div>
+    <div class="second-crawl">
+      {{ problem?.secondCrawl.length }}
+    </div>
+    <div
+      class="diff-crawl"
+      [ngClass]="{
+        'text--red':
+          problem?.firstCrawl.length - problem?.secondCrawl.length > 0,
+        'text--green':
+          problem?.firstCrawl.length - problem?.secondCrawl.length < 0
+      }"
+    >
+      {{
+        problem?.firstCrawl.length - problem?.secondCrawl.length === 0
+          ? "-"
+          : problem?.firstCrawl.length - problem?.secondCrawl.length
+      }}
+    </div>
+    <div
+      class="diff-crawl-percent"
+      [ngClass]="{
+        'text--red':
+          problem?.firstCrawl.length - problem?.secondCrawl.length > 0,
+        'text--green':
+          problem?.firstCrawl.length - problem?.secondCrawl.length < 0
+      }"
+    >
+      {{
+        problem?.firstCrawl.length - problem?.secondCrawl.length === 0
+          ? "-"
+          : (((problem?.firstCrawl.length - problem?.secondCrawl.length) /
+              problem?.secondCrawl.length) *
+              100 | number: "1.0-0") + "%"
+      }}
+    </div>
+  </div>
+</ng-template>
+
+<div class="problem">
+  <div class="problem-header">
+    <div></div>
+    <div class="first-crawl-header">Crawl 1</div>
+    <div class="second-crawl-header">Crawl 2</div>
+    <div class="diff-crawl-header">Diff</div>
+    <div class="diff-crawl-percent">Diff %</div>
+  </div>
+  <div class="problem-body">
+    <ng-container
+      [ngTemplateOutlet]="problemMainItem"
+      [ngTemplateOutletContext]="{ problem: problemsTechnical }"
+    >
+    </ng-container>
+    <ng-container
+      [ngTemplateOutlet]="problemMainItem"
+      [ngTemplateOutletContext]="{ problem: problemsSemantic }"
+    >
+    </ng-container>
+  </div>
+</div>
